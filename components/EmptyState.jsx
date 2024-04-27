@@ -3,6 +3,7 @@ import React from 'react';
 
 import { images } from '../constants';
 import CustomButton from './CustomButton';
+import { Link } from 'expo-router';
 
 const EmptyState = () => {
   return (
@@ -16,7 +17,9 @@ const EmptyState = () => {
           Be the first one to upload a video
         </Text>
       </View>
-      <CustomButton text={'Create video'} />
+      <Link href={'/create'}>
+        <CustomButton text={'Create video'} />
+      </Link>
     </View>
   );
 };

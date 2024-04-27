@@ -5,12 +5,7 @@ import { icons } from '../constants';
 import { ResizeMode, Video } from 'expo-av';
 
 const VideoCard = ({
-  video: {
-    title,
-    thumbnail,
-    video,
-    users: { username, avatar },
-  },
+  video: { title, thumbnail, video, username, avatar },
 }) => {
   const [play, setPlay] = useState(false);
   return (
@@ -40,7 +35,7 @@ const VideoCard = ({
       {play ? (
         <Video
           source={{
-            uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            uri: video,
           }}
           className="h-60 w-full rounded-3xl mt-5"
           resizeMode={ResizeMode.CONTAIN}

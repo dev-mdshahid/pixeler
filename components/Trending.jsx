@@ -39,7 +39,7 @@ const TrendingItem = ({ item, activeItem }) => {
       {play ? (
         <Video
           source={{
-            uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            uri: item.video,
           }}
           className="h-72 w-52 rounded-3xl mt-5"
           resizeMode={ResizeMode.CONTAIN}

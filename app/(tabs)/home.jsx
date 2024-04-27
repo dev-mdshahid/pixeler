@@ -45,6 +45,18 @@ const Home = () => {
   const onRefresh = async () => {
     setRefreshing(true);
     // refresh code
+    setIsLoading(true);
+    try {
+      const response1 = await getAllPosts();
+      setData(response1);
+
+      const response2 = await getLatestPosts();
+      setLatestPosts(response2);
+    } catch (error) {
+      Alert.alert('Error while loading data', error);
+    } finally {
+      setIsLoading(false);
+    }
 
     setRefreshing(false);
   };

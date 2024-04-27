@@ -47,6 +47,15 @@ const Profile = () => {
   const onRefresh = async () => {
     setRefreshing(true);
     // refresh code
+    setIsLoading(true);
+    try {
+      const response = await getUserPosts(user.accountId);
+      setData(response);
+    } catch (error) {
+      Alert.alert('Error while loading data', error);
+    } finally {
+      setIsLoading(false);
+    }
 
     setRefreshing(false);
   };
