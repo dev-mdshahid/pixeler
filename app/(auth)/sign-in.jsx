@@ -8,8 +8,10 @@ import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
 import { Link, router } from 'expo-router';
 import { createUser, signIn } from '../../lib/appwrite';
+import { getUserSession } from '../../context/AuthProvider';
 
 const SignIn = () => {
+  const { setUser } = getUserSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -17,22 +19,18 @@ const SignIn = () => {
   });
 
   const handleSignIn = async () => {
-    if (!formData.email || !formData.password ) {
+    if (!formData.email || !formData.password) {
       Alert.alert('Please fill in all the fields!');
     } else {
       setIsSubmitting(true);
       try {
-        const response = await signIn(
-          formData.email,
-          formData.password,
-        );
+        const response = await signIn(formData.email, formData.password);
         router.replace('/home');
         setIsSubmitting(false);
       } catch (error) {
         setIsSubmitting(false);
         throw new Error(error);
       }
-      
     }
   };
   return (
@@ -65,7 +63,11 @@ const SignIn = () => {
         </View>
 
         <View className="mt-5">
-          <CustomButton text={'Login'} handlePress={handleSignIn} isSubmitting={isSubmitting}/>
+          <CustomButton
+            text={'Login'}
+            handlePress={handleSignIn}
+            isSubmitting={isSubmitting}
+          />
         </View>
 
         <View className="mt-5">

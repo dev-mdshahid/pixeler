@@ -36,7 +36,6 @@ const SignUp = () => {
           formData.username
         );
         router.replace('/home');
-        console.log(response);
       } catch (error) {
         throw new Error(error);
       }
