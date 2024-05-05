@@ -12,21 +12,26 @@ import { images } from '../../constants';
 import SearchBox from '../../components/SearchBox';
 import Trending from '../../components/Trending';
 import EmptyState from '../../components/EmptyState';
-import { getAllPosts } from '../../lib/appwrite';
+import { getAllPosts, getLatestPosts } from '../../lib/appwrite';
 import { useAppwrite } from '../../lib/hooks/useAppwrite';
+import VideoCard from '../../components/VideoCard';
 
 // Never make a component in React native async as they all are client components
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
+  const [latestPosts, setLatestPosts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await getAllPosts();
-        setData(response);
+        const response1 = await getAllPosts();
+        setData(response1);
+
+        const response2 = await getLatestPosts();
+        setLatestPosts(response2);
       } catch (error) {
         Alert.alert('Error while loading data', error);
       } finally {
@@ -40,24 +45,32 @@ const Home = () => {
   const onRefresh = async () => {
     setRefreshing(true);
     // refresh code
+    setIsLoading(true);
+    try {
+      const response1 = await getAllPosts();
+      setData(response1);
+
+      const response2 = await getLatestPosts();
+      setLatestPosts(response2);
+    } catch (error) {
+      Alert.alert('Error while loading data', error);
+    } finally {
+      setIsLoading(false);
+    }
 
     setRefreshing(false);
   };
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView className="bg-primary h-full p-5">
       <FlatList
         data={data}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => {
-          return (
-            <View>
-              <Text className="text-white">{item.title}</Text>
-            </View>
-          );
+          return <VideoCard video={item} />;
         }}
         ListHeaderComponent={() => {
           return (
-            <View className="p-5">
+            <View className="mb-10">
               {/* Top heading + logo */}
               <View className="flex-row justify-between items-center mb-5">
                 {/* Heading */}
@@ -82,7 +95,10 @@ const Home = () => {
               <SearchBox placeholder={'Search for a video topic'} />
 
               {/* Horizontal trending list */}
-              <Trending />
+              <Text className="text-lg text-white font-psemibold mb-5">
+                Latest Videos
+              </Text>
+              <Trending videos={latestPosts} />
             </View>
           );
         }}
