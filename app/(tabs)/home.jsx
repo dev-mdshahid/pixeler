@@ -15,6 +15,7 @@ import EmptyState from '../../components/EmptyState';
 import { getAllPosts, getLatestPosts } from '../../lib/appwrite';
 import { useAppwrite } from '../../lib/hooks/useAppwrite';
 import VideoCard from '../../components/VideoCard';
+import { getUserSession } from '../../context/AuthProvider';
 
 // Never make a component in React native async as they all are client components
 const Home = () => {
@@ -22,6 +23,7 @@ const Home = () => {
   const [data, setData] = useState([]);
   const [latestPosts, setLatestPosts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const { user } = getUserSession();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,7 +81,7 @@ const Home = () => {
                     Welcome Back
                   </Text>
                   <Text className="font-psemibold text-white text-3xl">
-                    Shahid
+                    {user.username}
                   </Text>
                 </View>
 
