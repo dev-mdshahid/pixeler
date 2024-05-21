@@ -31,6 +31,7 @@ const Home = () => {
       try {
         const response1 = await getAllPosts();
         setData(response1);
+        console.log(response1);
 
         const response2 = await getLatestPosts();
         setLatestPosts(response2);

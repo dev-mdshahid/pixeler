@@ -1,13 +1,34 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Alert } from 'react-native';
 import React, { useState } from 'react';
 
 import { icons } from '../constants';
 import { ResizeMode, Video } from 'expo-av';
+import CustomButton from './CustomButton';
+import { approvePost, deletePost } from '../lib/appwrite';
+import { router } from 'expo-router';
 
 const VideoCard = ({
-  video: { title, thumbnail, video, username, avatar },
+  video: { title, thumbnail, video, username, avatar, $id },
+  approve,
 }) => {
   const [play, setPlay] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleApprove = async () => {
+    setIsLoading(true);
+    const result = await approvePost($id);
+
+    Alert.alert('Success', 'Post approved successfully');
+    router.push('/home');
+  };
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    const result = await deletePost($id);
+
+    Alert.alert('Success', 'Post deleted successfully');
+    router.push('/home');
+  };
   return (
     <View className="mb-14">
       <View className="flex-row items-center justify-between w-full mb-5">
@@ -22,6 +43,7 @@ const VideoCard = ({
 
           <View>
             <Text className="text-white font-psemibold truncate">{title}</Text>
+            <Text className="text-white font-psemibold truncate">{$id}</Text>
             <Text className="text-gray-100 font-pregular text-sm">
               {username}
             </Text>
@@ -30,7 +52,7 @@ const VideoCard = ({
         <Image source={icons.menu} className="h-5 " resizeMode="contain" />
       </View>
 
-      {/*thumbnail  */}
+      {/* Thumbnail  */}
 
       {play ? (
         <Video
@@ -66,6 +88,22 @@ const VideoCard = ({
           />
         </TouchableOpacity>
       )}
+      <View className="mt-3 flex flex-col gap-3">
+        {approve && (
+          <>
+            <CustomButton
+              text={'Approve'}
+              isSubmitting={isLoading}
+              handlePress={handleApprove}
+            />
+            <CustomButton
+              text={'Delete'}
+              isSubmitting={isDeleting}
+              handlePress={handleDelete}
+            />
+          </>
+        )}
+      </View>
     </View>
   );
 };

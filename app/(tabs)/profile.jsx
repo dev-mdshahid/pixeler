@@ -13,6 +13,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import {
   getAllPosts,
   getSearchedPosts,
+  getUnApprovedPosts,
   getUserPosts,
   signOut,
 } from '../../lib/appwrite';
@@ -32,8 +33,13 @@ const Profile = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await getUserPosts(user.accountId);
-        setData(response);
+        if (user.email.toLowerCase() !== 'admin@mail.com') {
+          const response = await getUserPosts(user.accountId);
+          setData(response);
+        } else {
+          const response = await getUnApprovedPosts();
+          setData(response);
+        }
       } catch (error) {
         Alert.alert('Error while loading data', error);
       } finally {
@@ -49,8 +55,13 @@ const Profile = () => {
     // refresh code
     setIsLoading(true);
     try {
-      const response = await getUserPosts(user.accountId);
-      setData(response);
+      if (user.email.toLowerCase() !== 'admin@mail.com') {
+        const response = await getUserPosts(user.accountId);
+        setData(response);
+      } else {
+        const response = await getUnApprovedPosts();
+        setData(response);
+      }
     } catch (error) {
       Alert.alert('Error while loading data', error);
     } finally {
@@ -70,7 +81,12 @@ const Profile = () => {
         data={data}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => {
-          return <VideoCard video={item} />;
+          return (
+            <VideoCard
+              video={item}
+              approve={user.email.toLowerCase() === 'admin@mail.com'}
+            />
+          );
         }}
         ListHeaderComponent={() => {
           return (
@@ -93,16 +109,31 @@ const Profile = () => {
                 </View>
 
                 <View className="flex-row gap-12">
-                  <View className="items-center">
-                    <Text className="text-3xl font-pmedium text-white">10</Text>
-                    <Text className="font-pregular text-white">Posts</Text>
-                  </View>
-                  <View className="items-center">
-                    <Text className="text-3xl font-pmedium text-white">
-                      1.2k
-                    </Text>
-                    <Text className="font-pregular text-white">Views</Text>
-                  </View>
+                  {user.email.toLowerCase() === 'admin@mail.com' ? (
+                    <View className="items-center">
+                      <Text className="text-3xl font-pmedium text-white">
+                        Admin
+                      </Text>
+                      <Text className="font-pregular text-white">
+                        User Role
+                      </Text>
+                    </View>
+                  ) : (
+                    <>
+                      <View className="items-center">
+                        <Text className="text-3xl font-pmedium text-white">
+                          10
+                        </Text>
+                        <Text className="font-pregular text-white">Posts</Text>
+                      </View>
+                      <View className="items-center">
+                        <Text className="text-3xl font-pmedium text-white">
+                          1.2k
+                        </Text>
+                        <Text className="font-pregular text-white">Views</Text>
+                      </View>
+                    </>
+                  )}
                 </View>
               </View>
             </View>
