@@ -29,6 +29,7 @@ const VideoCard = ({
     Alert.alert('Success', 'Post deleted successfully');
     router.push('/home');
   };
+
   return (
     <View className="mb-14">
       <View className="flex-row items-center justify-between w-full mb-5">
@@ -43,7 +44,7 @@ const VideoCard = ({
 
           <View>
             <Text className="text-white font-psemibold truncate">{title}</Text>
-            <Text className="text-white font-psemibold truncate">{$id}</Text>
+            {/* <Text className="text-white font-psemibold truncate">{$id}</Text> */}
             <Text className="text-gray-100 font-pregular text-sm">
               {username}
             </Text>
@@ -91,11 +92,13 @@ const VideoCard = ({
       <View className="mt-3 flex flex-col gap-3">
         {approve && (
           <>
+            <View className="h-2"></View>
             <CustomButton
               text={'Approve'}
               isSubmitting={isLoading}
               handlePress={handleApprove}
             />
+            <View className=""></View>
             <CustomButton
               text={'Delete'}
               isSubmitting={isDeleting}

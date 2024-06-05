@@ -112,7 +112,7 @@ const Profile = () => {
                   {user.email.toLowerCase() === 'admin@mail.com' ? (
                     <View className="items-center">
                       <Text className="text-3xl font-pmedium text-white">
-                        Admin
+                        Approve Panel
                       </Text>
                       <Text className="font-pregular text-white">
                         User Role
